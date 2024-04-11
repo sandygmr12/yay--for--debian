@@ -1,0 +1,38 @@
+yay() {
+    if [ "$#" -eq 0 ]; then
+        if [ "$(id -u)" -eq 0 ]; then
+            echo "Don't use yay with sudo."
+        else
+            sudo nala update && sudo nala upgrade
+        fi
+    elif [ "$1" = "-h" ]; then
+        echo "Usage: yay [-s] [-S]"
+    else
+        case "$1" in
+            "-s")
+                shift
+                nala search "$@"
+                ;;
+            "-S")
+                shift
+                sudo nala install "$@"
+                ;;
+            "-R")
+                shift
+                sudo nala remove "$@"
+                ;;
+            "-AR")
+                shift
+                sudo nala autoremove "$@"
+                ;;
+            "-C")
+                shift
+                sudo nala clean "$@"
+                ;;
+            *)
+                echo "Usage: yay [-s search] [-S install ] [-R remove ] [-AR autoremove ] [C clean]"
+                return 1
+                ;;
+        esac
+    fi
+}
